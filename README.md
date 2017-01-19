@@ -1,2 +1,2 @@
 # web_scraping
-playground jungle gym.
+playground jungle gym to scrap the web.
