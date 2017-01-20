@@ -8,7 +8,7 @@ var app = express();
 
 app.get('/scrape', function(req, res){
 
-    url = 'http://www.imdb.com/title/tt1229340';
+    var url = 'http://www.imdb.com/title/tt1229340';
 
     request(url, function(error, response, html) {
         if(!error){
@@ -16,11 +16,32 @@ app.get('/scrape', function(req, res){
 
             var title, release, rating;
             var json = { title: "", release: "", rating: ""};
+
+            $('.title_wrapper').filter(function(){
+                var data = $(this);
+                title = data.children().first().text();
+                release = data.children().last().children().last().text();
+
+                json.title = title;
+                json.release = release;
+            })
+            $('.imdbRating').filter(function(){
+                var data = $(this);
+
+                rating = data.children().first().text();
+                json.rating = rating;
+            })
         }
-    })
+
+        fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){
+            console.log('File written success');
+        })
+
+        res.send('Check console')
+    });
 })
 
-app.listen('8000')
+app.listen('8081')
 
 console.log('Things just happens here');
 
